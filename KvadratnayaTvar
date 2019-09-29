@@ -1,0 +1,180 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+const int EPS = 0.0000000000001;
+const int Infinity = 3;
+
+//-------------------------------------------------—
+//! @param [in] b b-coefficient
+//! @param [in] c c-coefficient
+//! @param [out] x1 Pointer to the 1st root
+//!
+//! @return Number of roots
+//!
+//! @note In case of infinite number of roots ,
+//! returns 3
+//-------------------------------------------------—
+int solvelinear(double b, double c, double *x1);
+
+
+
+//-------------------------------------------------—
+//! @param [in] a a-coefficient
+//! @param [in] b b-coefficient
+//! @param [in] c c-coefficient
+//! @param [out] x1 Pointer to the 1st root
+//! @param [out] x2 Pointer to the 2nd root
+//!
+//! @return Number of roots
+//-------------------------------------------------—
+int solvesquare(double a, double b, double c, double *x1, double *x2);
+
+
+
+//-------------------------------------------------—
+//! @param [in] n n-double type number
+//! @param [in] EPS EPS-const
+//!
+//! @return is the number equal to zero
+//-------------------------------------------------—
+double checkdouble(double t);
+
+
+
+//-------------------------------------------------—
+//! UNIT TEST
+//-------------------------------------------------—
+void progcheck();
+
+
+void otvet(int number, double x1, double x2);
+
+
+int main()
+{						
+	int number = 0;
+	double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;//rx1,rx2-корни уравнения
+	printf("Vvedite coeficenti a, b, c:\n");
+	scanf("%lg %lg %lg", &a, &b, &c);
+	if (a == 0)  /*bx+c=0 => x0=-c/b*/
+		number = solvelinear(b, c, &x1);
+	else
+		number = solvesquare(a, b, c, &x1, &x2);
+	otvet(number, x1, x2);
+	progcheck();
+	system("pause");
+	return 0;
+}
+
+
+
+int solvelinear(double b, double c, double *x1)// нет корней - код 0, 1 корень - 1, 2 корня - 2, бесконечное количество решений - код 3;
+{
+	if (c == 0)
+	{
+		if (b == 0)
+			return 3;
+		else
+		{
+			*x1 = 0;
+			return 1;
+		}
+	}
+	else
+	{
+		if (b == 0)
+			return 0;
+		else
+		{
+			*x1 = checkdouble(-c / b);
+			return 1;
+		}
+	}
+}
+
+
+
+int solvesquare(double a, double b, double c, double *x1, double *x2)
+{
+	double d = checkdouble(sqrt(b * b - (4 * a * c)));
+	if (d == 0)
+	{
+		*x1 = checkdouble(-b / (2 * a));
+		return 1;
+	}
+	else if (d > 0)
+	{
+		*x1 = checkdouble((-b + d) / (2 * a));
+		*x2 = checkdouble((-b - d) / (2 * a));
+		return 2;
+	}
+	else
+		return 0;
+}
+
+
+
+double checkdouble(double t)
+{
+	if (EPS > fabs(t))
+		return 0;
+	else
+		return t;
+}
+
+
+
+void progcheck()
+{
+	printf("chtobi proverit rabotosposobnost vvedite 1 inache 0 \n");
+	int ans;
+	scanf("%d", &ans);
+	if (ans == 1)
+	{
+		double tempx1, tempx2;
+		if (solvelinear(0, 0, &tempx1, &tempx2) == 3)
+			printf("Programma rabotaet\n");
+		else
+			printf("1V programme sboi, prekratite ispolzovanie i proverte kod");
+		if (solvesquare(1, 2, 1, &tempx1, &tempx2) == 1)
+		{
+			if (tempx1 == -1)
+				printf("Programma rabotaet\n");
+			else
+				printf("2V programme sboi, prekratite ispolzovanie i proverte kod");
+		}
+		if (solvelinear(0, 1, &tempx1, &tempx2) == 0)
+			printf("Programma rabotaet\n");
+		else
+			printf("3V programme sboi, prekratite ispolzovanie i proverte kod");
+		if (solvelinear(1, -1, &tempx1, &tempx2) == 1)
+		{
+			if (tempx1 == 1)
+				printf("Programma rabotaet\n");
+			else
+				printf("4V programme sboi, prekratite ispolzovanie i proverte kod");
+		}
+		if (solvesquare(1, 0, -1, &tempx1, &tempx2) == 2)
+		{
+			if (tempx1 == 1 && tempx2 == -1)
+				printf("Programma rabotaet\n");
+			else
+				printf("5V programme sboi, prekratite ispolzovanie i proverte kod");
+		}
+		}
+
+}
+void otvet(int number, double x1, double x2)
+{
+	if (number == 0)
+		printf("Net resheniy\n");
+	else if (number == 1)
+		printf("x=%lg\n", x1);
+	else if (number == 2)
+		printf("x1=%lg, x2=%lg\n", x1, x2);
+	else
+		printf("Beskonechnoe kol-vo resheniy\n");
+}
