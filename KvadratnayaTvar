@@ -28,7 +28,7 @@ void input(double *a, double *b, double *c);
 //! @return Number of roots
 //!
 //! @note In case of infinite number of roots ,
-//! returns 3
+//! returns INF
 //-------------------------------------------------—
 int solvelinear(double b, double c, double *x1);
 
@@ -41,7 +41,7 @@ int solvelinear(double b, double c, double *x1);
 //! @param [out] x1 Pointer to the 1st root
 //! @param [out] x2 Pointer to the 2nd root
 //!
-//! @return Number of roots
+//! @return number of roots
 //-------------------------------------------------—
 int solvesquare(double a, double b, double c, double *x1, double *x2);
 
@@ -51,7 +51,7 @@ int solvesquare(double a, double b, double c, double *x1, double *x2);
 //! @param [in] n n-double type number
 //! @param [in] EPS EPS-const
 //!
-//! @return is the number equal to zero
+//! @return is the result of comparation
 //-------------------------------------------------—
 double checkdouble(double t);
 
@@ -64,6 +64,11 @@ void progcheck();
 
 
 
+//-------------------------------------------------—
+//@param [in] number of roots
+//@param [in] first root
+//@param [in] second root
+//-------------------------------------------------—
 void otvet(int number, double x1, double x2);
 
 
@@ -71,7 +76,7 @@ void otvet(int number, double x1, double x2);
 int main()
 {						
 	int number = 0;
-	double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;//rx1,rx2-корни уравнения
+	double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
 	printf("Please, enter a, b, c:\n");
 	input(&a, &b, &c);
 	if (a != 0)
