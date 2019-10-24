@@ -69,10 +69,8 @@ int main()
 
 	assert(ONEGIN != NULL);
 
+	int n = 0;
 	int nstr = 1;
-	int n = howmuchsymbolsandstrings(ONEGIN,&nstr);
-
-	printf("%i\n",n);
 	
 	fseek(ONEGIN, sizeof(char), SEEK_END);
 	n = ftell(ONEGIN);
@@ -80,29 +78,34 @@ int main()
 	assert(n != 0);
 
 	char *buffer;
+	char **strukaz;
+
 	buffer = (char *)calloc(n,sizeof(char));
 	rewind(ONEGIN);
-	n = fread(buffer, sizeof(char), n, ONEGIN);
-	
-	char **strukaz;
+	fread(buffer, sizeof(char), n, ONEGIN);
+
 	strukaz = (char **)calloc(nstr, sizeof(char*));
 	
-	for (int i = 0; i < n; i++)
-	{
-		int j = 0;
-		if (i == 0)
-		{
-			strukaz[j] = &buffer[i];
-			j++;
+	for (int i = 0; i < n; i++) {
+		if (buffer[i] == '\n') {
+			buffer[i] = '\0';
+			nstr++;
 		}
-		if (buffer[i] == '\0')
-		{
-			strukaz[j] = &buffer[i + 2];
+	}
+
+	assert(nstr != 0);
+
+	strukaz = (char**)calloc(nstr, sizeof(char*));
+	strukaz[0] = buffer;
+	int j = 0;
+	for (int i = 0; buffer[i] != EOF && i < n && j < nstr; i++) {
+		if (buffer[i] == '\0') {
+			strukaz[j] = &buffer[i] + 1;
 			j++;
 		}
 	}
+
 	printf("%d\t%d\n", n, nstr);
-	printf("%s\n", strukaz);
 	system("pause");
 	free(strukaz);
 	free(buffer);
@@ -159,7 +162,7 @@ void qSortFirst(char* v[], int left, int right) {
 	last = left;
 
 	for (counter = left + 1; counter <= right; counter++) {
-		if (strCmpForward(v[counter], v[left]) < 0) {
+		if (strcmp(v[counter], v[left]) < 0) {
 			swap(v, counter, ++last);
 		}
 	}
@@ -169,3 +172,4 @@ void qSortFirst(char* v[], int left, int right) {
 	qSortFirst(v, left, last - 1);
 	qSortFirst(v, last + 1, right);
 }
+
